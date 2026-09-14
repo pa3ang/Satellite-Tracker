@@ -33,8 +33,8 @@ The program requires:
 - Python 3
 - Tkinter
 - An Icom IC-705
-- USB connection between the computer and IC-705
-- Internet connection for the the WebSDR functionality
+- USB connection between the computer and the IC-705
+- Internet connection for the WebSDR functionality
 
 The application has been developed and tested on:
 
@@ -66,24 +66,28 @@ If Python reports a missing module, install the required module with `pip3` or t
 
 ## Satellites
 
-Currently the program caters for 3 satellites: RS-44, FO-29 and ISS.
+Currently, the program supports three satellites:
+
+- RS-44
+- FO-29
+- ISS
 
 ## Settings
 
-You need to change de settings to your station needs 
+The settings need to be adjusted to match your station setup.
 
 | Setting | Description |
 |---|---|
-| `TLE_URL` | Leave as is. Needed for the Keppler TLE update and runs at program start |
-| `LOCAL_TZ` | Adjust is needed. Use same format! |
-| `IC705_PORT` | Change according your system. On windows it can be a COM port |
-| `IC_705_BAUDRATE` | Changes if different |
-| `TX_OFFSET_STEP` | Leave unchanged |
-| `DEFAULT_TX_OFFSET` | Leave unchanged. Will be overruled per satellite |
-| `SPEED_OF_LIGHT` | CLeave unchanged |
-| `LOCATOR` | Change to your Maidenhead location |
-| `HEIGHT` | Change is needed |
-| `WEBSDR_URL` | Leave unchanged |
+| `TLE_URL` | Leave unchanged. This is used to download the latest Kepler TLE data when the program starts. |
+| `LOCAL_TZ` | Adjust if needed. Use the same format as shown in the program. |
+| `IC705_PORT` | Change according to your system. On Windows, this can be a COM port. |
+| `IC705_BAUDRATE` | Change if your system requires a different baud rate. |
+| `TX_OFFSET_STEP` | Leave unchanged. |
+| `DEFAULT_TX_OFFSET` | Leave unchanged. This value is overridden for individual satellites where required. |
+| `SPEED_OF_LIGHT` | Leave unchanged. |
+| `LOCATOR` | Change to your Maidenhead locator. |
+| `HEIGHT` | Change to the height of your station above sea level, in metres. |
+| `WEBSDR_URL` | Leave unchanged unless you want to use another WebSDR. |
 
 ## Icom IC-705
 
@@ -104,7 +108,7 @@ For reliable operation, make sure that:
 
 The WebSDR functionality allows the application to monitor an external WebSDR.
 
-The WebSDR itself is operated through its web interface. The Satellite Tracker does not need to operate the complete WebSDR interface.
+The WebSDR itself is operated through its normal web interface. The Satellite Tracker does not need to operate the complete WebSDR interface.
 
 Instead, the program reads the relevant receiver information, such as:
 
