@@ -64,6 +64,27 @@ python3 main.py
 
 If Python reports a missing module, install the required module with `pip3` or through the Linux package manager as appropriate for your distribution.
 
+## Satellites
+
+Currently the program caters for 3 satellites: RS-44, FO-29 and ISS.
+
+## Settings
+
+You need to change de settings to your station needs 
+
+| Setting | Description |
+|---|---|
+| `TLE_URL` | Leave as is. Needed for the Keppler TLE update and runs at program start |
+| `LOCAL_TZ` | Adjust is needed. Use same format! |
+| `IC705_PORT` | Change according your system. On windows it can be a COM port |
+| `IC_705_BAUDRATE` | Changes if different |
+| `TX_OFFSET_STEP` | Leave unchanged |
+| `DEFAULT_TX_OFFSET` | Leave unchanged. Will be overruled per satellite |
+| `SPEED_OF_LIGHT` | CLeave unchanged |
+| `LOCATOR` | Change to your Maidenhead location |
+| `HEIGHT` | Change is needed |
+| `WEBSDR_URL` | Leave unchanged |
+
 ## Icom IC-705
 
 The Satellite Tracker communicates with the IC-705 through its CAT interface.
