@@ -23,7 +23,7 @@ The project is developed for use on Linux and is primarily intended for amateur-
 |---|---|
 | `main.py` | Main application and graphical user interface |
 | `ic705.py` | Communication and CAT control for the Icom IC-705 |
-| `websdr.py` | Communication with the WebSDR and reading the receiver frequency/mode |
+| `websdr.py` | Communication with the WebSDR and reading the receiver frequency |
 | `icon.png` | Application icon |
 
 ## Requirements
@@ -34,7 +34,7 @@ The program requires:
 - Tkinter
 - An Icom IC-705
 - USB connection between the computer and IC-705
-- Internet connection when using the WebSDR functionality
+- Internet connection for the the WebSDR functionality
 
 The application has been developed and tested on:
 
