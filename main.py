@@ -15,19 +15,83 @@ except ImportError: IC705 = None
 # ============================================================
 # SATELLITES
 # ============================================================
-SATELLITES={
-"RS-44":{"norad":44909,"tle_name":"RS-44","uplink_min":145.935e6,"uplink_max":145.995e6,"downlink_min":435.610e6,"downlink_max":435.670e6,"center_tx":145.965e6,"center_rx":435.640e6,"tx_offset":-2400,"tx_mode":"LSB","rx_mode":"USB","fm":False},
-"FO-29":{"norad":24278,"tle_name":"FO-29","uplink_min":145.900e6,"uplink_max":146.000e6,"downlink_min":435.800e6,"downlink_max":435.900e6,"center_tx":145.950e6,"center_rx":435.850e6,"tx_offset":1600,"tx_mode":"LSB","rx_mode":"USB","fm":False},
-"ISS":{"norad":25544,"tle_name":"ISS","uplink_min":145.970e6,"uplink_max":146.010e6,"downlink_min":437.780e6,"downlink_max":437.820e6,"center_tx":145.990e6,"center_rx":437.800e6,"tx_offset":0,"tx_mode":"FM","rx_mode":"FM","fm":True}}
+
+SATELLITES = {
+
+    "RS-44": {
+        "norad":         44909,
+        "tle_name":      "RS-44",
+        "uplink_min":    145.935e6,
+        "uplink_max":    145.995e6,
+        "downlink_min":  435.610e6,
+        "downlink_max":  435.670e6,
+        "center_tx":     145.965e6,
+        "center_rx":     435.640e6,
+        "tx_offset":     -2400,
+        "tx_mode":       "LSB",
+        "rx_mode":       "USB",
+        "fm":            False,
+    },
+
+    "FO-29": {
+        "norad":         24278,
+        "tle_name":      "FO-29",
+        "uplink_min":    145.900e6,
+        "uplink_max":    146.000e6,
+        "downlink_min":  435.800e6,
+        "downlink_max":  435.900e6,
+        "center_tx":     145.950e6,
+        "center_rx":     435.850e6,
+        "tx_offset":     1600,
+        "tx_mode":       "LSB",
+        "rx_mode":       "USB",
+        "fm":            False,
+    },
+
+    "ISS": {
+        "norad":         25544,
+        "tle_name":      "ISS",
+        "uplink_min":    145.970e6,
+        "uplink_max":    146.010e6,
+        "downlink_min":  437.780e6,
+        "downlink_max":  437.820e6,
+        "center_tx":     145.990e6,
+        "center_rx":     437.800e6,
+        "tx_offset":     0,
+        "tx_mode":       "FM",
+        "rx_mode":       "FM",
+        "fm":            True,
+    },
+}
+
 
 # ============================================================
 # SETTINGS
 # ============================================================
-TLE_URL="https://www.amsat.org/tle/current/dailytle.txt"
-LOCAL_TZ=ZoneInfo("Europe/Amsterdam"); UPDATE_MS=1000; PASS_SEARCH_DAYS=2.0
-IC705_PORT="/dev/serial/by-id/usb-Icom_Inc._IC-705_IC-705_13005046-if00"; IC705_BAUDRATE=19200
-TX_OFFSET_STEP=100; DEFAULT_TX_OFFSET=-2400; SPEED_OF_LIGHT=299792.458
-LOCATOR="JO32AM"; HEIGHT=8; WEBSDR_URL="http://sdr.websdrmaasbree.nl:8909/"
+
+TLE_URL = "https://www.amsat.org/tle/current/dailytle.txt"
+
+LOCAL_TZ = ZoneInfo("Europe/Amsterdam")
+
+UPDATE_MS = 1000
+PASS_SEARCH_DAYS = 2.0
+
+IC705_PORT = (
+    "/dev/serial/by-id/"
+    "usb-Icom_Inc._IC-705_IC-705_13005046-if00"
+)
+IC705_BAUDRATE = 19200
+
+TX_OFFSET_STEP = 100
+DEFAULT_TX_OFFSET = -2400
+
+SPEED_OF_LIGHT = 299792.458
+
+LOCATOR = "JO32AM"
+HEIGHT = 8
+
+WEBSDR_URL = "http://sdr.websdrmaasbree.nl:8909/"
+
 
 # ============================================================
 # TRACKER
