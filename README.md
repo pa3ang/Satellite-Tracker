@@ -175,7 +175,7 @@ https://github.com/pa3ang/Satellite-Tracker
 
 **PA3ANG**
 
-Amateur Radio since 1979.
+Amateur Radio since 1977.
 
 ## License
 
