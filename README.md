@@ -217,9 +217,9 @@ For reliable operation, make sure that:
 - no other program is exclusively using the same serial interface;
 - the IC-705 is in VFO mode
 
-## ENGAGE
+## Engage
 
-There is a provision to Engage and disengage the IC-705 to enable manual adjustment of the IC-705.
+The **Engage** button allows you to engage or disengage the IC-705 control. When disengaged, the IC-705 can be adjusted manually.
 
 ## WebSDR
 
