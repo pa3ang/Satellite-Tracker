@@ -134,12 +134,7 @@ The WebSDR is operated manually by the user through its normal web interface.
 
 SatTracker **only reads the current receiver frequency** from the WebSDR.
 
-It does **not**:
-
-- change the WebSDR frequency;
-- change the WebSDR mode;
-- change the WebSDR band;
-- control the WebSDR.
+It does **not** control the WebSDR.
 
 The received WebSDR frequency is used to keep the IC-705 frequency synchronized.
 
@@ -147,7 +142,7 @@ The received WebSDR frequency is used to keep the IC-705 frequency synchronized.
 
 Each satellite has its own section in the INI file.
 
-The current configuration contains:
+The current configuration (ini file) contains:
 
 - RS-44
 - FO-29
@@ -163,7 +158,6 @@ The sections are:
 
 Satellite-specific settings can include the satellite name, NORAD identifier, frequencies and TX offset.
 
-This makes it possible to change satellite parameters without modifying `main.py`.
 
 ## TLE data
 
@@ -218,7 +212,8 @@ For reliable operation, make sure that:
 - the IC-705 is switched on;
 - the USB connection is active;
 - the configured CAT interface is available;
-- no other program is exclusively using the same serial interface.
+- no other program is exclusively using the same serial interface;
+- the IC-705 is in VFO mode
 
 ## WebSDR
 
@@ -242,7 +237,7 @@ SatTracker
 IC-705
 ```
 
-No frequency, mode or band information is sent back to the WebSDR by SatTracker.
+No frequency or mode is sent back to the WebSDR by SatTracker.
 
 ## IC-705 operating mode
 
@@ -324,11 +319,11 @@ This allows the operator to use the WebSDR for remote signal monitoring while th
 From the project directory:
 
 ```bash
-cd ~/SatTracker
+cd ~/Satellite-Tracker
 python3 main.py
 ```
 
-For development or troubleshooting, running the program from a terminal is recommended because error messages are then visible.
+For troubleshooting, running the program from a terminal is recommended because error messages are then visible.
 
 ## GitHub
 
