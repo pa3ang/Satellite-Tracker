@@ -147,6 +147,7 @@ The current configuration (ini file) contains:
 - RS-44
 - FO-29
 - ISS
+- SO-50
 
 The sections are:
 
@@ -154,9 +155,10 @@ The sections are:
 [satellite_RS-44]
 [satellite_FO-29]
 [satellite_ISS]
+[satelliet SO-50]
 ```
 
-Satellite-specific settings can include the satellite name, NORAD identifier, frequencies and TX offset.
+Satellite-specific settings can include the satellite name, NORAD identifier, frequencies and TX offset and for FM repeaters the CTCSS Tone.
 
 
 ## TLE data
@@ -214,6 +216,10 @@ For reliable operation, make sure that:
 - the configured CAT interface is available;
 - no other program is exclusively using the same serial interface;
 - the IC-705 is in VFO mode
+
+## ENGAGE
+
+There is a provision to Engage and disengage the IC-705 to enable manual adjustment of the IC-705.
 
 ## WebSDR
 

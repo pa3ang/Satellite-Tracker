@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # SatTracker V1.1 - Doppler + Transponder + TX offset + IC-705 + Maasbree WebSDR
 # WebSDR read-only; operator tunes WebSDR manually; WebSDR starts automatically.
+# V1.2 added CTCSS tone for FM staellites and added Engage / Disengage button to enable manual adjust of the IC-705
 
 import threading
 import tkinter as tk
@@ -45,7 +46,8 @@ class SatTracker:
                     "tx_offset":s.getint("tx_offset"),
                     "tx_mode":s.get("tx_mode"),
                     "rx_mode":s.get("rx_mode"),
-                    "fm":s.getboolean("fm")
+                    "fm":s.getboolean("fm"),
+                    "ctcss":s.getfloat("ctcss",fallback=0)
                 }
         if not satellites:
             raise SystemExit(f"No satellites found in:\n\n{filename}")
@@ -90,6 +92,7 @@ class SatTracker:
         self.sat_config=self.satellites[self.default_satellite]
         self.mode=tk.StringVar(value="FM" if self.sat_config["fm"] else self.sat_config["tx_mode"])
         self.tx_offset=tk.IntVar(value=self.sat_config.get("tx_offset",self.default_tx_offset))
+        self.uplink_engaged=tk.BooleanVar(value=False)
         self.websdr_rx_frequency=None
         self.status=tk.StringVar(value="TLE loading...")
         self.az=tk.StringVar(value="---°")
@@ -147,13 +150,19 @@ class SatTracker:
         self.update_mode_combo()
         self.update_footer()
         self.load_tle()
+        if self.ic705:
+            try:
+                self.ic705.set_mode(self.mode.get())
+                self.ic705.set_ctcss(self.sat_config.get("ctcss",0))
+            except Exception as e:
+                print(f"IC-705 mode/CTCSS error: {e}")
 
     def update_mode_values(self,event=None):
         mode=self.mode.get()
         if self.sat_config["fm"]:
             mode="FM"
             self.mode.set(mode)
-        if self.ic705:
+        if self.ic705 and self.uplink_engaged.get():
             try:
                 self.ic705.set_mode(mode)
                 print(f"IC-705 TX mode = {mode}")
@@ -173,12 +182,24 @@ class SatTracker:
 
         input_frame=tk.Frame(root,bg="#4a2020",bd=1,relief="solid")
         input_frame.pack(fill="x",padx=35,pady=(0,12))
-        tk.Label(input_frame,text="TX OFFSET (Hz)",font=("DejaVu Sans",11,"bold"),fg="#aaaaaa",bg="#4a2020").pack(pady=(8,4))
-        entry_frame=tk.Frame(input_frame,bg="#4a2020")
-        entry_frame.pack(pady=(0,10))
-        tk.Button(entry_frame,text="−",width=3,command=lambda:self.change_tx_offset(-self.tx_offset_step)).pack(side="left",padx=2)
-        tk.Label(entry_frame,textvariable=self.tx_offset,width=7,font=("DejaVu Sans",12,"bold"),fg="white",bg="#4a2020").pack(side="left",padx=2)
-        tk.Button(entry_frame,text="+",width=3,command=lambda:self.change_tx_offset(self.tx_offset_step)).pack(side="left",padx=2)
+        input_frame.columnconfigure(0,weight=1)
+        input_frame.columnconfigure(1,weight=1)
+
+        offset_frame=tk.Frame(input_frame,bg="#4a2020")
+        offset_frame.grid(row=0,column=0,sticky="nsew")
+        tk.Label(offset_frame,text="TX OFFSET (Hz)",font=("DejaVu Sans",11,"bold"),fg="#aaaaaa",bg="#4a2020").pack(pady=(8,4))
+        offset_buttons=tk.Frame(offset_frame,bg="#4a2020")
+        offset_buttons.pack(pady=(0,10))
+        tk.Button(offset_buttons,text="−",width=3,command=lambda:self.change_tx_offset(-self.tx_offset_step)).pack(side="left",padx=2)
+        tk.Label(offset_buttons,textvariable=self.tx_offset,width=7,font=("DejaVu Sans",12,"bold"),fg="white",bg="#4a2020").pack(side="left",padx=2)
+        tk.Button(offset_buttons,text="+",width=3,command=lambda:self.change_tx_offset(self.tx_offset_step)).pack(side="left",padx=2)
+
+        engage_frame=tk.Frame(input_frame,bg="#4a2020")
+        engage_frame.grid(row=0,column=1,sticky="nsew")
+        tk.Label(engage_frame,text="UPLINK",font=("DejaVu Sans",11,"bold"),fg="#aaaaaa",bg="#4a2020").pack(pady=(8,4))
+        self.uplink_button=tk.Button(engage_frame,text="ENGAGE",width=10,font=("DejaVu Sans",10,"bold"),command=self.toggle_uplink)
+        self.uplink_button.pack(pady=(0,10))
+        self.update_uplink_button()
 
         info=tk.Frame(root,bg="#101010")
         info.pack(fill="x",padx=30)
@@ -224,7 +245,7 @@ class SatTracker:
         mode_frame=tk.Frame(combined,bg="#1c1c1c",bd=1,relief="solid")
         mode_frame.grid(row=0,column=3,padx=(5,0),sticky="nsew")
         tk.Label(mode_frame,text="TX MODE",font=("DejaVu Sans",11,"bold"),fg="#aaaaaa",bg="#1c1c1c").pack(pady=(8,5))
-        self.mode_combo=ttk.Combobox(mode_frame,textvariable=self.mode,values=["LSB","CW","RTTY"],state="readonly",width=8,justify="center",font=("DejaVu Sans",14,"bold"))
+        self.mode_combo=ttk.Combobox(mode_frame,textvariable=self.mode,state="readonly",width=8,justify="center",font=("DejaVu Sans",14,"bold"))
         self.mode_combo.pack(padx=10,pady=(3,14))
         self.mode_combo.bind("<<ComboboxSelected>>",self.update_mode_values)
         self.update_mode_combo()
@@ -267,6 +288,38 @@ class SatTracker:
             print(f"WebSDR start error: {e}")
             self.status.set(f"WebSDR error: {e}")
 
+    def toggle_uplink(self):
+        if self.uplink_engaged.get():
+            self.uplink_engaged.set(False)
+            print("IC-705 UPLINK DISENGAGED")
+            self.update_uplink_button()
+            self.status.set("Uplink DISENGAGED — IC-705 wordt niet aangestuurd")
+            return
+
+        self.uplink_engaged.set(True)
+        print("IC-705 UPLINK ENGAGED")
+        self.update_uplink_button()
+
+        # Stuur direct de actuele TX-instellingen naar de IC-705
+        if self.ic705 and self.websdr_rx_frequency is not None:
+            try:
+                now=self.ts.now()
+                radial_velocity,_=self.get_range_rate(now)
+                _,current_tx,_,_,_,_=self.calculate_tracking_frequencies(
+                    radial_velocity,
+                    self.websdr_rx_frequency
+                )
+                self.ic705.set_freq(int(round(current_tx)))
+                self.ic705.set_mode(self.mode.get())
+                print(f"IC-705 uplink engaged: {current_tx/1e6:.5f} MHz {self.mode.get()}")
+            except Exception as e:
+                print(f"IC-705 engage error: {e}")
+
+    def update_uplink_button(self):
+        if self.uplink_engaged.get():
+            self.uplink_button.config(text="DISENGAGE")
+        else:
+            self.uplink_button.config(text="ENGAGE")
     def update_footer(self):
         cfg=self.sat_config
         self.footer.config(text=f"{self.satellite_name.get()} | {self.locator.get()} | {cfg['uplink_min']/1e6:.3f}–{cfg['uplink_max']/1e6:.3f} MHz UP | {cfg['downlink_min']/1e6:.3f}–{cfg['downlink_max']/1e6:.3f} MHz DOWN | {self.local_tz.key}")
@@ -463,7 +516,7 @@ class SatTracker:
                     self.doppler_rx.set(f"{rx_doppler:+.0f} Hz")
                     self.doppler_tx.set(f"{tx_doppler - self.tx_offset.get():+.0f} Hz")
 
-                    if self.ic705:
+                    if self.ic705 and self.uplink_engaged.get():
                         try:
                             self.ic705.set_freq(int(round(current_tx)))
                             self.ic705.set_mode(self.mode.get())
