@@ -1,24 +1,25 @@
 # Satellite Tracker
 
-**Satellite Tracker** is a Python application for tracking amateur-radio satellites and controlling an Icom IC-705. The program combines satellite tracking information with automatic frequency and mode control of the radio.
+**Satellite Tracker** is a Python application for making QSOs using amateur-radio satellites and controlling an Icom IC-705. Reception is provided by the Maasbree WebSDR on port 8909, while the uplink transmission is made from the home station. The program combines the satellite downlink frequency with the calculated Doppler shift and calculates the corresponding uplink frequency for the radio.
 
 The project is developed for use on Linux and is primarily intended for amateur-radio operators.
 
 ## Features
 
-- Satellite tracking
-- Graphical user interface
-- Icom IC-705 CAT control
-- Automatic calculation of satellite Doppler shift
-- Automatic setting of IC-705 frequency
-- Automatic setting of IC-705 operating mode
-- TX frequency offset support
-- WebSDR frequency monitoring
-- External WebSDR support
-- Satellite-specific settings through an INI file
-- Automatic download of current TLE data
-- Suitable for satellite operation and monitoring
-- Designed to run on Linux Mint and other Linux distributions
+* Satellite tracking
+* Graphical user interface
+* Icom IC-705 CAT control
+* Automatic calculation of satellite Doppler shift
+* Automatic setting of the IC-705 frequency
+* Setting of the IC-705 operating mode
+* TX frequency offset support for satellite transponder frequency correction
+* WebSDR frequency monitoring
+* External WebSDR support, including automatic Audio Start
+* Satellite settings through an INI file
+* Automatic download of current TLE data
+* Suitable for satellite operation and monitoring
+* Designed to run on multiple platforms
+* Note: designed and tested with the Maasbree WebSDR on port 8909
 
 ## Project files
 
@@ -198,6 +199,8 @@ IC-705 correction:      +1850 Hz
 ```
 
 This allows the displayed Doppler value and the additional station-specific TX correction to remain clearly separated.
+
+Additionally, this makes it possible to fine-tune the uplink frequency based on what is heard on the downlink.
 
 ## Icom IC-705
 
